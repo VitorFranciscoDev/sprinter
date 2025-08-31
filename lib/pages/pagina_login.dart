@@ -37,7 +37,7 @@ class _PaginaLoginState extends State<PaginaLogin> {
       if(controllerEmail.text.isEmpty) {
         emailValido = false;
         erroEmail = "Email não pode estar vazio";
-      } else if(controllerEmail.text.contains("@")) {
+      } else if(!controllerEmail.text.contains("@")) {
         emailValido = false;
         erroEmail = "Email precisa conter @";
       } else {
