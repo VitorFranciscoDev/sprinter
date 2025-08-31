@@ -75,10 +75,18 @@ class _PaginaLoginState extends State<PaginaLogin> {
           );
         }
       } catch (e) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Erro: ${e.toString()}')));
-      }
+      setState(() {
+        if (e.toString().contains("Usuário não encontrado")) {
+          erroEmail = "Email não cadastrado";
+        } else if (e.toString().contains("Senha incorreta")) {
+          erroSenha = "Senha incorreta.";
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
+        }
+      });
+    }
     }
   }
 
