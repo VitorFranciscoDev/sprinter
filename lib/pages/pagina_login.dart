@@ -76,15 +76,8 @@ class _PaginaLoginState extends State<PaginaLogin> {
         }
       } catch (e) {
         setState(() {
-          if (e.toString().contains("E-mail inválido")) {
-            erroEmail = "Email não cadastrado";
-          } else if (e.toString().contains("The supplied auth credential is incorrect, malformed or has expired")) {
-            erroSenha = "Senha incorreta.";
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(e.toString())),
-            );
-          }
+          erroEmail = "Login inválido";
+          erroSenha = "Login inválido";
         });
       }
     }

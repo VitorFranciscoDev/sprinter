@@ -92,7 +92,6 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime(2050),
-      locale: Locale("pt", "br"),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
