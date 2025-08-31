@@ -70,13 +70,41 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
     "~",
   ];
 
+  bool validarData(String date) {
+    try {
+      DateFormat format = DateFormat("dd/MM/yyyy");
+      DateTime data = format.parseStrict(date);
+
+      final agora = DateTime.now();
+      if (data.isAfter(agora)) return false;
+      if (data.year < 1900) return false;
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<void> _selecionarData(BuildContext context) async {
     DateTime? dataSelecionada = await showDatePicker(
       context: context,
-      initialDate: DateTime(2000),
+      helpText: "Selecione a sua data de nascimento",
+      initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-      locale: const Locale("pt", "BR"),
+      lastDate: DateTime(2050),
+      locale: Locale("pt", "BR"),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Colors.green, // cor de destaque (botão OK, seleção)
+              onPrimary: Colors.white, // texto em cima do primary
+              onSurface: Colors.black, // texto normal
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (dataSelecionada != null) {
@@ -89,7 +117,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
 
   void verificarECadastrar() {
     setState(() {
-      if(controllerNome.text.isEmpty) {
+      if (controllerNome.text.isEmpty) {
         nomeValido = false;
         erroNome = "O nome não pode estar vazio";
       } else {
@@ -97,10 +125,10 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
         erroNome = null;
       }
 
-      if(controllerEmail.text.isEmpty) {
+      if (controllerEmail.text.isEmpty) {
         emailValido = false;
         erroEmail = "O Email não pode estar vazio";
-      } else if(!controllerEmail.text.contains("@")) {
+      } else if (!controllerEmail.text.contains("@")) {
         emailValido = false;
         erroEmail = "O Email precisa ter @";
       } else {
@@ -108,10 +136,10 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
         erroEmail = null;
       }
 
-      if(controllerCpf.text.isEmpty) {
+      if (controllerCpf.text.isEmpty) {
         cpfValido = false;
         erroCPF = "O CPF não pode estar vazio";
-      } else if(!CPFValidator.isValid(controllerCpf.text)) {
+      } else if (!CPFValidator.isValid(controllerCpf.text)) {
         cpfValido = false;
         erroCPF = "CPF inválido";
       } else {
@@ -119,21 +147,24 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
         erroCPF = null;
       }
 
-      if(controllerData.text.isEmpty) {
+      if (controllerData.text.isEmpty) {
         dataValida = false;
         erroData = "A data não pode estar vazia";
-      } else if(controllerData.text.length != 10) {
+      } else if (controllerData.text.length != 10) {
         dataValida = false;
         erroData = "A data precisa conter 8 dígitos";
+      } else if(!validarData(controllerData.text)) {
+        dataValida = false;
+        erroData = "Data inválida";
       } else {
         dataValida = true;
         erroData = null;
       }
 
-      if(controllerSenha.text.isEmpty) {
+      if (controllerSenha.text.isEmpty) {
         senhaValida = false;
         erroSenha = "A senha não pode estar vazia";
-      } else if(controllerSenha.text.length < 8) {
+      } else if (controllerSenha.text.length < 8) {
         senhaValida = false;
         erroSenha = "A senha precisa ter, pelo menos, 8 dígitos";
       } else {
@@ -141,10 +172,10 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
         erroSenha = null;
       }
 
-      if(controllerConfirmarSenha.text.isEmpty) {
+      if (controllerConfirmarSenha.text.isEmpty) {
         confirmarSenhaValida = false;
         erroConfirmarSenha = "Confirmar senha não pode estar vazio";
-      } else if(controllerConfirmarSenha.text != controllerSenha.text) {
+      } else if (controllerConfirmarSenha.text != controllerSenha.text) {
         confirmarSenhaValida = false;
         erroConfirmarSenha = "Senhas não correspondentes";
       } else {
@@ -152,8 +183,6 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
         erroConfirmarSenha = null;
       }
     });
-
-    
 
     if (nomeValido &&
         emailValido &&
@@ -205,133 +234,151 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                 SizedBox(height: 20),
                 Image.asset("assets/images/Logo_Sprinter.png", height: 75),
                 Padding(padding: EdgeInsets.only(top: 15)),
-                TextField(
-                  controller: controllerNome,
-                  decoration: InputDecoration(
-                    labelText: ("Nome de usuário"),
-                    errorText: erroNome,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    floatingLabelStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Lao Muang Don',
-                    ),
-                    hintText: "Insira o seu nome:",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(35)
-                    ),
-                  ),
-                ),
-
-                Padding(padding: EdgeInsets.only(top: 20)),
-                TextField(
-                  controller: controllerEmail,
-                  decoration: InputDecoration(
-                    labelText: ("Email:"),
-                    errorText: erroEmail,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    floatingLabelStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Lao Muang Don',
-                    ),
-                    hintText: "Insira seu E-mail",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(35),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: TextField(
+                    controller: controllerNome,
+                    decoration: InputDecoration(
+                      labelText: ("Nome de usuário"),
+                      errorText: erroNome,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      floatingLabelStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Lao Muang Don',
+                      ),
+                      hintText: "Insira o seu nome:",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                      ),
                     ),
                   ),
                 ),
 
-                Padding(padding: EdgeInsets.only(top: 20)),
-                TextFormField(
-                  controller: controllerData,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    DataInputFormatter(),
-                  ],
-                  decoration: InputDecoration(
-                    labelText: ("Data de Nascimento:"),
-                    errorText: erroData,
-                    suffixIcon: IconButton(
-                      onPressed: () => _selecionarData(context),
-                      icon: Icon(Icons.calendar_today),
-                    ),
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    floatingLabelStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Lao Muang Don',
-                    ),
-                    hintText: "DD/MM/YYYY",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(35),
-                    ),
-                  ),
-                ),
-                Padding(padding: EdgeInsets.only(top: 20)),
-                TextFormField(
-                  controller: controllerCpf,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    CpfInputFormatter(),
-                  ],
-                  decoration: InputDecoration(
-                    labelText: ("CPF:"),
-                    errorText: erroCPF,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    floatingLabelStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Lao Muang Don',
-                    ),
-                    hintText: "000.000.000-00",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(35),
-                    ),
-                  ),
-                ),
-                Padding(padding: EdgeInsets.only(top: 20)),
-
-                TextField(
-                  controller: controllerSenha,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: ("Senha:"),
-                    errorText: erroSenha,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    floatingLabelStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Lao Muang Don',
-                    ),
-                    hintText: "Insira sua Senha",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(35),
+                Padding(padding: EdgeInsets.only(top: 40)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: TextField(
+                    controller: controllerEmail,
+                    decoration: InputDecoration(
+                      labelText: ("Email:"),
+                      errorText: erroEmail,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      floatingLabelStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Lao Muang Don',
+                      ),
+                      hintText: "Insira seu E-mail",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                      ),
                     ),
                   ),
                 ),
 
-                Padding(padding: EdgeInsets.only(top: 20)),
-                TextField(
-                  controller: controllerConfirmarSenha,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: ("Confirmar senha:"),
-                    errorText: erroConfirmarSenha,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    floatingLabelStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'Lao Muang Don',
-                    ),
-                    hintText: "Insira sua senha novamente",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(35),
+                Padding(padding: EdgeInsets.only(top: 35)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: TextFormField(
+                    controller: controllerData,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      DataInputFormatter(),
+                    ],
+                    decoration: InputDecoration(
+                      labelText: ("Data de Nascimento:"),
+                      errorText: erroData,
+                      suffixIcon: IconButton(
+                        onPressed: () => _selecionarData(context),
+                        icon: Icon(Icons.calendar_today),
+                      ),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      floatingLabelStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Lao Muang Don',
+                      ),
+                      hintText: "DD/MM/YYYY",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                      ),
                     ),
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(top: 30)),
+                Padding(padding: EdgeInsets.only(top: 35)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: TextFormField(
+                    controller: controllerCpf,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CpfInputFormatter(),
+                    ],
+                    decoration: InputDecoration(
+                      labelText: ("CPF:"),
+                      errorText: erroCPF,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      floatingLabelStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Lao Muang Don',
+                      ),
+                      hintText: "000.000.000-00",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(top: 35)),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: TextField(
+                    controller: controllerSenha,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: ("Senha:"),
+                      errorText: erroSenha,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      floatingLabelStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Lao Muang Don',
+                      ),
+                      hintText: "Insira sua Senha",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                      ),
+                    ),
+                  ),
+                ),
+
+                Padding(padding: EdgeInsets.only(top: 35)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: TextField(
+                    controller: controllerConfirmarSenha,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: ("Confirmar senha:"),
+                      errorText: erroConfirmarSenha,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      floatingLabelStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'Lao Muang Don',
+                      ),
+                      hintText: "Insira sua senha novamente",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(top: 40)),
                 TextButton(
                   style: TextButton.styleFrom(
                     backgroundColor: Color.fromARGB(1000, 5, 106, 12),
@@ -339,7 +386,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                   onPressed: () => verificarECadastrar(),
                   child: Container(
                     height: 50,
-                    width: 319,
+                    width: 320,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(35),
                     ),
