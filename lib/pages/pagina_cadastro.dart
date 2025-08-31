@@ -92,14 +92,14 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime(2050),
-      locale: Locale("pt", "BR"),
+      locale: Locale("pt", "br"),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Colors.green, // cor de destaque (botão OK, seleção)
-              onPrimary: Colors.white, // texto em cima do primary
-              onSurface: Colors.black, // texto normal
+              primary: Colors.green,
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
             ),
           ),
           child: child!,
@@ -223,9 +223,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         body: Center(
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
@@ -416,7 +414,6 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
             ),
           ),
         ),
-      ),
     );
   }
 }
