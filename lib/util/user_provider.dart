@@ -122,15 +122,19 @@ class UserProvider extends ChangeNotifier {
 
   Future<String?> login(String email, String senha) async {
     try {
-
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: senha);
-
-
       return userCredential.user?.uid;
     } on FirebaseAuthException catch (e) {
-      print('Erro ao logar: ${e.message}');
-      return null;
+      if (e.code == 'user-not-found') {
+        throw Exception("Usuário não encontrado.");
+      } else if (e.code == 'wrong-password') {
+        throw Exception("Senha incorreta.");
+      } else if (e.code == 'invalid-email') {
+        throw Exception("E-mail inválido.");
+      } else {
+        throw Exception("Erro ao logar: ${e.message}");
+      }
     }
   }
 

@@ -32,13 +32,14 @@ class _PaginaLoginState extends State<PaginaLogin> {
 
   void esqueceuSenha() {}
 
-  void verificarELogar() {
+  void verificarELogar() async {
     setState(() {
       if(controllerEmail.text.isEmpty) {
         emailValido = false;
         erroEmail = "Email não pode estar vazio";
-      //} else if(!controllerEmail.text) {
-
+      } else if(controllerEmail.text.contains("@")) {
+        emailValido = false;
+        erroEmail = "Email precisa conter @";
       } else {
         emailValido = true;
         erroEmail = null;
@@ -50,8 +51,6 @@ class _PaginaLoginState extends State<PaginaLogin> {
       } else if(controllerSenha.text.length < 8) {
         senhaValida = false;
         erroSenha = "Senha precisa ter, pelo menos, 8 dígitos";
-      //} else if(!controllerSenha.text) {
-
       } else {
         senhaValida = true;
         erroSenha = null;
@@ -64,14 +63,17 @@ class _PaginaLoginState extends State<PaginaLogin> {
           context,
           listen: false,
         );
-        var uid = userProvider.login(controllerEmail.text, controllerSenha.text);
-        controllerEmail.clear();
-        controllerSenha.clear();
-        userProvider.carregarUsuario(uid.toString());
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Pagina()),
-        );
+        var uid = await userProvider.login(controllerEmail.text, controllerSenha.text);
+
+        if(uid != null) {
+          controllerEmail.clear();
+          controllerSenha.clear();
+          await userProvider.carregarUsuario(uid);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Pagina()),
+          );
+        }
       } catch (e) {
         ScaffoldMessenger.of(
           context,
