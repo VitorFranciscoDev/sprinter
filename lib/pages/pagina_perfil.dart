@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:myapp/pages/pagina.dart';
 import 'package:myapp/util/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -41,12 +42,13 @@ class PaginaPerfilState extends State<PaginaPerfil> {
   @override
   Widget build(BuildContext context) {
     final userProvider = context.watch<UserProvider>();
-    final fotoBase64 = userProvider.user?.fotoPerfil;
+    final fotoBase64 = userProvider.getFotoPerfil();
     Uint8List? bytes;
     if (fotoBase64 != null && fotoBase64.isNotEmpty) {
-      bytes = base64Decode(fotoBase64);
+      bytes = base64Decode(fotoBase64['fotoPerfil']);
     }
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           actionsPadding: EdgeInsets.only(right: 10),
@@ -57,19 +59,17 @@ class PaginaPerfilState extends State<PaginaPerfil> {
           actions: [
             IconButton(
               icon: CircleAvatar(
-                backgroundImage:
-                    bytes != null
-                        ? MemoryImage(bytes)
-                        : AssetImage("assets/images/perfil_basico.jpg"),
+                backgroundImage: bytes != null
+                    ? MemoryImage(bytes)
+                    : AssetImage("assets/images/perfil_basico.jpg"),
                 radius: 25,
               ),
-              onPressed:
-                  () => {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => PaginaPerfil()),
-                    ),
-                  },
+              onPressed: () => {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => PaginaPerfil()),
+                ),
+              },
             ),
           ],
         ),
@@ -107,138 +107,136 @@ class PaginaPerfilState extends State<PaginaPerfil> {
                 children: [
                   Image(image: AssetImage("assets/images/Logo_Sprinter.png")),
                   Padding(padding: EdgeInsets.only(top: 15)),
-                  Stack(
-                    children: [
-                      IconButton(
-                        icon: CircleAvatar(
-                          backgroundImage:
-                              bytes != null
-                                  ? MemoryImage(bytes)
-                                  : AssetImage(
-                                    "assets/images/perfil_basico.jpg",
-                                  ),
-                          radius: 100,
+
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 163, 219, 99),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: CircleAvatar(
+                            backgroundImage: bytes != null
+                                ? MemoryImage(bytes, scale: 50)
+                                : AssetImage("assets/images/perfil_basico.jpg"),
+                            radius: 50,
+                          ),
+                          onPressed: () => {userProvider.selecionarImagem()},
                         ),
-                        onPressed: () => {userProvider.selecionarImagem()},
-                      ),
-                      Container(
-                        color: const Color.fromARGB(255, 163, 219, 99),
-                        child: Column(
-                          children: [
-                            Padding(padding: EdgeInsets.only(top: 100)),
-                            Row(
-                              children: [
-                                Text(
-                                  "Nome:",
-                                  style: TextStyle(
-                                    fontFamily: 'Lao Muang Don',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  userProvider.user?.nome ?? "",
-                                  style: TextStyle(
-                                    fontFamily: 'Lao Muang Don',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 10)),
-                            Container(
-                              width: 300,
-                              height: 20,
+                        Padding(padding: EdgeInsets.only(top: 10)),
 
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    userProvider.user?.email ?? "",
-                                    style: TextStyle(
-                                      fontFamily: 'Lao Muang Don',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.email_outlined,
-                                    color: Colors.black,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 10)),
-                            Container(
-                              width: 300,
-                              height: 20,
-
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    userProvider.user?.nascimento ?? "",
-                                    style: TextStyle(
-                                      fontFamily: 'Lao Muang Don',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  Icon(Icons.date_range, color: Colors.black),
-                                ],
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 10)),
-                            Container(
-                              width: 300,
-                              height: 20,
-
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "***.***.***-**",
-                                    style: TextStyle(
-                                      fontFamily: 'Lao Muang Don',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 10)),
-                            Text(
-                              "CarboCoins:",
-                              style: TextStyle(
-                                fontFamily: 'Lao Muang Don',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              "${userProvider.user?.carboCoins} Cc",
-                              style: TextStyle(
-                                fontFamily: 'Lao Muang Don',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 40,
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 10)),
-                          ],
+                        Text(
+                          "NOME:",
+                          style: TextStyle(
+                            fontFamily: 'Lao Muang Don',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
                         ),
-                      ),
-                    ],
+                        Padding(padding: EdgeInsets.only(top: 5)),
+                        Text(
+                          userProvider.user?.nome ?? "",
+                          style: TextStyle(
+                            fontFamily: 'Lao Muang Don',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Container(
+                          width: 300,
+                          height: 30,
+
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                userProvider.user?.email ?? "",
+                                style: TextStyle(
+                                  fontFamily: 'Lao Muang Don',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Icon(Icons.email_outlined),
+                            ],
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Container(
+                          width: 300,
+                          height: 30,
+
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                userProvider.user?.nascimento ?? "",
+                                style: TextStyle(
+                                  fontFamily: 'Lao Muang Don',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Icon(Icons.date_range),
+                            ],
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Container(
+                          width: 300,
+                          height: 30,
+
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "***.***.***-**",
+                                style: TextStyle(
+                                  fontFamily: 'Lao Muang Don',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                        Text(
+                          "CarboCoins:",
+                          style: TextStyle(
+                            fontFamily: 'Lao Muang Don',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          "${userProvider.user?.carboCoins} Cc",
+                          style: TextStyle(
+                            fontFamily: 'Lao Muang Don',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 10)),
+                      ],
+                    ),
                   ),
                 ],
               ),

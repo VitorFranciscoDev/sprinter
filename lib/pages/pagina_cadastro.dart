@@ -34,6 +34,8 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
   bool dataValida = true;
   bool senhaValida = true;
   bool confirmarSenhaValida = true;
+  bool _obscureTextSenha = true;
+  bool _obscureTextConfirmarSenha = true;
 
   List<String> caracteresEspeciais = [
     "! ",
@@ -152,7 +154,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
       } else if (controllerData.text.length != 10) {
         dataValida = false;
         erroData = "A data precisa conter 8 dígitos";
-      } else if(!validarData(controllerData.text)) {
+      } else if (!validarData(controllerData.text)) {
         dataValida = false;
         erroData = "Data inválida";
       } else {
@@ -223,196 +225,221 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                Image.asset("assets/images/Logo_Sprinter.png", height: 75),
-                Padding(padding: EdgeInsets.only(top: 15)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextField(
-                    controller: controllerNome,
-                    decoration: InputDecoration(
-                      labelText: ("Nome de usuário"),
-                      errorText: erroNome,
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      floatingLabelStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Lao Muang Don',
-                      ),
-                      hintText: "Insira o seu nome:",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35),
-                      ),
+      body: Center(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              Image.asset("assets/images/Logo_Sprinter.png", height: 75),
+              Padding(padding: EdgeInsets.only(top: 15)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: TextField(
+                  controller: controllerNome,
+                  decoration: InputDecoration(
+                    labelText: ("Nome de usuário"),
+                    errorText: erroNome,
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    floatingLabelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontFamily: 'Lao Muang Don',
                     ),
-                  ),
-                ),
-
-                Padding(padding: EdgeInsets.only(top: 40)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextField(
-                    controller: controllerEmail,
-                    decoration: InputDecoration(
-                      labelText: ("Email:"),
-                      errorText: erroEmail,
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      floatingLabelStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Lao Muang Don',
-                      ),
-                      hintText: "Insira seu E-mail",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35),
-                      ),
-                    ),
-                  ),
-                ),
-
-                Padding(padding: EdgeInsets.only(top: 35)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextFormField(
-                    controller: controllerData,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      DataInputFormatter(),
-                    ],
-                    decoration: InputDecoration(
-                      labelText: ("Data de Nascimento:"),
-                      errorText: erroData,
-                      suffixIcon: IconButton(
-                        onPressed: () => _selecionarData(context),
-                        icon: Icon(Icons.calendar_today),
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      floatingLabelStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Lao Muang Don',
-                      ),
-                      hintText: "DD/MM/YYYY",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(padding: EdgeInsets.only(top: 35)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextFormField(
-                    controller: controllerCpf,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      CpfInputFormatter(),
-                    ],
-                    decoration: InputDecoration(
-                      labelText: ("CPF:"),
-                      errorText: erroCPF,
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      floatingLabelStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Lao Muang Don',
-                      ),
-                      hintText: "000.000.000-00",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(padding: EdgeInsets.only(top: 35)),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextField(
-                    controller: controllerSenha,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: ("Senha:"),
-                      errorText: erroSenha,
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      floatingLabelStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Lao Muang Don',
-                      ),
-                      hintText: "Insira sua Senha",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35),
-                      ),
-                    ),
-                  ),
-                ),
-
-                Padding(padding: EdgeInsets.only(top: 35)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: TextField(
-                    controller: controllerConfirmarSenha,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: ("Confirmar senha:"),
-                      errorText: erroConfirmarSenha,
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      floatingLabelStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontFamily: 'Lao Muang Don',
-                      ),
-                      hintText: "Insira sua senha novamente",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(35),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(padding: EdgeInsets.only(top: 40)),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: Color.fromARGB(1000, 5, 106, 12),
-                  ),
-                  onPressed: () => verificarECadastrar(),
-                  child: Container(
-                    height: 50,
-                    width: 320,
-                    decoration: BoxDecoration(
+                    hintText: "Insira o seu nome:",
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(35),
                     ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "CADASTRAR",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontFamily: 'Lao Muang Don',
-                      ),
+                  ),
+                ),
+              ),
+
+              Padding(padding: EdgeInsets.only(top: 40)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: TextField(
+                  controller: controllerEmail,
+                  decoration: InputDecoration(
+                    labelText: ("Email:"),
+                    errorText: erroEmail,
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    floatingLabelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontFamily: 'Lao Muang Don',
+                    ),
+                    hintText: "Insira seu E-mail",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(35),
                     ),
                   ),
                 ),
-                TextButton(
-                  onPressed: () => login(),
-                  child: Text(
-                    "Já tem uma conta? Faça login!",
-                    style: TextStyle(
+              ),
+
+              Padding(padding: EdgeInsets.only(top: 35)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: TextFormField(
+                  controller: controllerData,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    DataInputFormatter(),
+                  ],
+                  decoration: InputDecoration(
+                    labelText: ("Data de Nascimento:"),
+                    errorText: erroData,
+                    suffixIcon: IconButton(
+                      onPressed: () => _selecionarData(context),
+                      icon: Icon(Icons.calendar_today),
+                    ),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    floatingLabelStyle: TextStyle(
                       color: Colors.black,
-                      fontSize: 15,
+                      fontSize: 20,
+                      fontFamily: 'Lao Muang Don',
+                    ),
+                    hintText: "DD/MM/YYYY",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(35),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(top: 35)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: TextFormField(
+                  controller: controllerCpf,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    CpfInputFormatter(),
+                  ],
+                  decoration: InputDecoration(
+                    labelText: ("CPF:"),
+                    errorText: erroCPF,
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    floatingLabelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontFamily: 'Lao Muang Don',
+                    ),
+                    hintText: "000.000.000-00",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(35),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(top: 35)),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: TextField(
+                  controller: controllerSenha,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: ("Senha:"),
+                    errorText: erroSenha,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureTextSenha
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureTextSenha = !_obscureTextSenha;
+                        });
+                      },
+                    ),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    floatingLabelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontFamily: 'Lao Muang Don',
+                    ),
+                    hintText: "Insira sua Senha",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(35),
+                    ),
+                  ),
+                ),
+              ),
+
+              Padding(padding: EdgeInsets.only(top: 35)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: TextField(
+                  controller: controllerConfirmarSenha,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: ("Confirmar senha:"),
+                    errorText: erroConfirmarSenha,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureTextConfirmarSenha
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureTextConfirmarSenha =
+                              !_obscureTextConfirmarSenha;
+                        });
+                      },
+                    ),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    floatingLabelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontFamily: 'Lao Muang Don',
+                    ),
+                    hintText: "Insira sua senha novamente",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(35),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(top: 40)),
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Color.fromARGB(1000, 5, 106, 12),
+                ),
+                onPressed: () => verificarECadastrar(),
+                child: Container(
+                  height: 50,
+                  width: 320,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(35),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "CADASTRAR",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
                       fontFamily: 'Lao Muang Don',
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              TextButton(
+                onPressed: () => login(),
+                child: Text(
+                  "Já tem uma conta? Faça login!",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontFamily: 'Lao Muang Don',
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
+      ),
     );
   }
 }

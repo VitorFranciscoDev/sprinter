@@ -23,7 +23,7 @@ class Produto {
     Map data = doc.data() as Map;
     return Produto(
       nome: data['nome'],
-      id:doc.id,
+      id: doc.id,
       descricao: data['descricao'],
       preco: data['preco'],
       tipo: data['tipo'],

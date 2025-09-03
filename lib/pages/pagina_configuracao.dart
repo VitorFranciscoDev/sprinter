@@ -65,14 +65,12 @@ class _PaginaConfiguracaoState extends State<PaginaConfiguracao> {
           actions: [
             IconButton(
               icon: CircleAvatar(
-                backgroundImage:
-                bytes != null
+                backgroundImage: bytes != null
                     ? MemoryImage(bytes)
                     : AssetImage("assets/images/perfil_basico.jpg"),
                 radius: 25,
               ),
-              onPressed:
-                  () => {
+              onPressed: () => {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => PaginaPerfil()),

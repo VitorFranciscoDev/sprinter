@@ -32,6 +32,7 @@ class _ListProdutosState extends State<ListProdutos> {
       return null;
     }
   }
+
   void initState() {
     super.initState();
     context.read<ProdutoProvider>().carregarProdutos();
@@ -57,7 +58,7 @@ class _ListProdutosState extends State<ListProdutos> {
           itemCount: produtos.length,
           itemBuilder: (context, index) {
             final produto = produtos[index];
-            return ProdutoCard(produtoId:produto.id);
+            return ProdutoCard(produtoId: produto.id);
           },
         );
       },

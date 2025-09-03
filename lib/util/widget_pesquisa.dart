@@ -36,15 +36,15 @@ class WidgetPesquisaState extends State<WidgetPesquisa> {
           StreamBuilder<QuerySnapshot>(
             stream: (query.isEmpty)
                 ? FirebaseFirestore.instance
-                .collection('produtos')
-                .limit(3) // mostra 3 primeiros sem filtro
-                .snapshots()
+                      .collection('produtos')
+                      .limit(3) // mostra 3 primeiros sem filtro
+                      .snapshots()
                 : FirebaseFirestore.instance
-                .collection('produtos')
-                .where('nome', isGreaterThanOrEqualTo: query)
-                .where('nome', isLessThanOrEqualTo: query + '\uf8ff')
-                .limit(3)
-                .snapshots(),
+                      .collection('produtos')
+                      .where('nome', isGreaterThanOrEqualTo: query)
+                      .where('nome', isLessThanOrEqualTo: query + '\uf8ff')
+                      .limit(3)
+                      .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
@@ -64,7 +64,6 @@ class WidgetPesquisaState extends State<WidgetPesquisa> {
                   return ListTile(
                     title: Text(produto['nome']),
                     onTap: () {
-
                       Navigator.push(
                         context,
                         MaterialPageRoute(

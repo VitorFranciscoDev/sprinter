@@ -9,13 +9,13 @@ class ProdutoProvider extends ChangeNotifier {
   Produto? produto;
 
   Future<void> adicionarProduto(
-      String nome,
-      String descricao,
-      double preco,
-      String tipo,
-      File imagem,
-      int quantidade,
-      ) async {
+    String nome,
+    String descricao,
+    double preco,
+    String tipo,
+    File imagem,
+    int quantidade,
+  ) async {
     try {
       List<int> imageBytes = await imagem.readAsBytes();
       String base64Image = base64Encode(imageBytes);

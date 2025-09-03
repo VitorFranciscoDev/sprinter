@@ -71,7 +71,7 @@ class _PaginaMapaState extends State<PaginaMapa> {
                   children: [
                     TileLayer(
                       urlTemplate:
-                      "https://s.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                          "https://s.tile.openstreetmap.org/{z}/{x}/{y}.png",
                       subdomains: const ['a', 'b', 'c'],
                       userAgentPackageName: "com.example.myapp",
                     ),

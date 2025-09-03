@@ -95,7 +95,7 @@ class _CriarProdutoPageState extends State<CriarProdutoPage> {
                 controller: _descricaoController,
                 decoration: const InputDecoration(labelText: 'Descrição'),
                 validator: (value) =>
-                value!.isEmpty ? 'Informe a descrição' : null,
+                    value!.isEmpty ? 'Informe a descrição' : null,
               ),
               TextFormField(
                 controller: _precoController,
@@ -113,26 +113,26 @@ class _CriarProdutoPageState extends State<CriarProdutoPage> {
                 decoration: const InputDecoration(labelText: 'Quantidade'),
                 keyboardType: TextInputType.number,
                 validator: (value) =>
-                value!.isEmpty ? 'Informe a quantidade' : null,
+                    value!.isEmpty ? 'Informe a quantidade' : null,
               ),
               const SizedBox(height: 16),
               GestureDetector(
                 onTap: _selecionarImagem,
                 child: _imagemSelecionada == null
                     ? Container(
-                  height: 150,
-                  color: Colors.grey[300],
-                  child: const Center(child: Text('Selecionar Imagem')),
-                )
+                        height: 150,
+                        color: Colors.grey[300],
+                        child: const Center(child: Text('Selecionar Imagem')),
+                      )
                     : Image.file(_imagemSelecionada!, height: 150),
               ),
               const SizedBox(height: 20),
               _carregando
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
-                onPressed: _salvarProduto,
-                child: const Text('Salvar Produto'),
-              ),
+                      onPressed: _salvarProduto,
+                      child: const Text('Salvar Produto'),
+                    ),
             ],
           ),
         ),

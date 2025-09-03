@@ -41,46 +41,62 @@ class ProdutoCard extends StatelessWidget {
             );
           },
           icon: Container(
+            width: 175,
+            height: 350,
             margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: const Color.fromARGB(255, 230, 230, 230),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(25),
             ),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   imagemBytes != null
-                      ? ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Image.memory(
-                      imagemBytes,
-                      height: 150,
-                      width: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  )
+                      ? Image.memory(
+                          imagemBytes,
+                          height: 175,
+                          width: 175,
+                          fit: BoxFit.cover,
+                        )
                       : const SizedBox(
-                    height: 150,
-                    child: Center(child: Icon(Icons.image, size: 50)),
-                  ),
+                          height: 150,
+                          child: Center(child: Icon(Icons.image, size: 50)),
+                        ),
                   SizedBox(height: 10),
                   Text(
                     produto['nome'],
                     style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontFamily: 'League Spartan',
+                      color: Color.fromARGB(255, 29, 64, 26),
                     ),
                   ),
-                  const SizedBox(height: 5),
-                  Text(
-                    " ${produto['preco'].toStringAsFixed(2)}Cc",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
+                  Padding(padding: EdgeInsetsGeometry.only(top: 5)),
+
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        " ${produto['preco'].toStringAsFixed(0)}",
+                        style: const TextStyle(
+                          fontSize: 35,
+                          fontFamily: "Medula One",
+                          color: Color.fromARGB(255, 29, 64, 26),
+                        ),
+                      ),
+                      Text(
+                        " Cc",
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontFamily: "League Spartan",
+                          color: Color.fromARGB(255, 29, 64, 26),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 5),
                 ],

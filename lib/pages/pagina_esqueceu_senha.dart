@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/pagina.dart';
@@ -18,17 +17,37 @@ class PaginaEsqueceuSenha extends StatefulWidget {
 class _PaginaEsqueceuSenhaState extends State<PaginaEsqueceuSenha> {
   bool emailValido = true;
 
+  String? erroEmail;
+
+  final email = FirebaseAuth.instance.currentUser?.email;
+
+  TextEditingController emailController = TextEditingController();
+
   Future<void> validarEmail() async {
-    final email = FirebaseAuth.instance.currentUser?.email;
-    if (email != null) {
-      setState(() {
-        emailValido = true;
-      });
-    } else {
+    if (emailController.text.isEmpty) {
       setState(() {
         emailValido = false;
+        erroEmail = "Email não pode estar vazio";
       });
+    } else if (emailController.text != email) {
+      setState(() {
+        emailValido = false;
+        erroEmail = "Email inválido";
+      });
+    } else {
+      emailValido = true;
+      erroEmail = null;
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: emailController.text,
+      );
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    emailController.text = email ?? "";
   }
 
   @override
@@ -49,14 +68,12 @@ class _PaginaEsqueceuSenhaState extends State<PaginaEsqueceuSenha> {
         actions: [
           IconButton(
             icon: CircleAvatar(
-              backgroundImage:
-              bytes != null
+              backgroundImage: bytes != null
                   ? MemoryImage(bytes)
                   : AssetImage("assets/images/perfil_basico.jpg"),
               radius: 25,
             ),
-            onPressed:
-                () => {
+            onPressed: () => {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => PaginaPerfil()),
@@ -65,56 +82,22 @@ class _PaginaEsqueceuSenhaState extends State<PaginaEsqueceuSenha> {
           ),
         ],
       ),
-
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              child: Image.asset("assets/images/Sprinter_simples.png"),
-            ),
-            ListTile(
-              leading: Icon(Icons.home, color: Colors.black),
-              title: Text("Pagina Inicial"),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => Pagina()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text("Fazer Logout"),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
       body: Center(
         child: Column(
           children: [
             Padding(padding: EdgeInsets.only(top: 10)),
             Image.asset("assets/images/Logo_Sprinter.png", height: 100),
             Padding(padding: EdgeInsets.only(top: 10)),
+            Icon(Icons.lock_rounded, size: 100),
+            Padding(padding: EdgeInsets.only(top: 10)),
             Text("Recuperação de Senha", style: TextStyle(fontSize: 20)),
             Padding(padding: EdgeInsets.only(top: 10)),
             TextField(
               decoration: InputDecoration(
                 labelText: ("Digite seu e-mail"),
-                enabledBorder: OutlineInputBorder(
+                errorText: erroEmail,
+                border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(35),
-                  borderSide: BorderSide(
-                    color: emailValido ? Colors.black : Colors.red,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(35),
-                  borderSide: BorderSide(
-                    color: emailValido ? Colors.black : Colors.red,
-                    width: 2,
-                  ),
                 ),
               ),
             ),
@@ -124,6 +107,13 @@ class _PaginaEsqueceuSenhaState extends State<PaginaEsqueceuSenha> {
                 validarEmail();
               },
               child: const Text("Receber Link de Recuperação"),
+            ),
+            Padding(padding: EdgeInsets.only(top: 30)),
+            GestureDetector(
+              onTap: () {
+                userProvider.esqueceuSenha();
+              },
+              child: const Text("Reenviar"),
             ),
           ],
         ),

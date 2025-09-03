@@ -105,6 +105,11 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Map<String, dynamic>? getFotoPerfil() {
+    if (_user == null) return null;
+    return {'fotoPerfil': _user!.fotoPerfil};
+  }
+
   Map<String, dynamic>? getDistanciaEPontos() {
     if (_user == null) return null;
     return {'distancia': _user!.distancia, 'pontos': _user!.carboCoins};

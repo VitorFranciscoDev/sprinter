@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/pagina.dart';
 import 'package:myapp/pages/pagina_cadastro.dart';
+import 'package:myapp/pages/pagina_esqueceu_senha.dart';
 import 'package:myapp/pages/pagina_tela_inicial.dart';
 import 'package:myapp/util/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -30,14 +31,19 @@ class _PaginaLoginState extends State<PaginaLogin> {
     );
   }
 
-  void esqueceuSenha() {}
+  void esqueceuSenha() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PaginaEsqueceuSenha()),
+    );
+  }
 
   void verificarELogar() async {
     setState(() {
-      if(controllerEmail.text.isEmpty) {
+      if (controllerEmail.text.isEmpty) {
         emailValido = false;
         erroEmail = "Email não pode estar vazio";
-      } else if(!controllerEmail.text.contains("@")) {
+      } else if (!controllerEmail.text.contains("@")) {
         emailValido = false;
         erroEmail = "Email precisa conter @";
       } else {
@@ -45,10 +51,10 @@ class _PaginaLoginState extends State<PaginaLogin> {
         erroEmail = null;
       }
 
-      if(controllerSenha.text.isEmpty) {
+      if (controllerSenha.text.isEmpty) {
         senhaValida = false;
         erroSenha = "Senha não pode estar vazia";
-      } else if(controllerSenha.text.length < 8) {
+      } else if (controllerSenha.text.length < 8) {
         senhaValida = false;
         erroSenha = "Senha precisa ter, pelo menos, 8 dígitos";
       } else {
@@ -63,9 +69,12 @@ class _PaginaLoginState extends State<PaginaLogin> {
           context,
           listen: false,
         );
-        var uid = await userProvider.login(controllerEmail.text, controllerSenha.text);
+        var uid = await userProvider.login(
+          controllerEmail.text,
+          controllerSenha.text,
+        );
 
-        if(uid != null) {
+        if (uid != null) {
           controllerEmail.clear();
           controllerSenha.clear();
           await userProvider.carregarUsuario(uid);

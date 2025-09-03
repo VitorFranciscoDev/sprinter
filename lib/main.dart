@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:myapp/pages/pagina.dart';
 import 'package:myapp/pages/pagina_cria_produto.dart';
 import 'package:myapp/pages/pagina_login.dart';
+import 'package:myapp/pages/pagina_mapa.dart';
 import 'package:myapp/util/mapa_provider.dart';
 import 'package:myapp/util/produto_provider.dart';
 import 'package:myapp/util/user_provider.dart';
 import 'package:provider/provider.dart';
-import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +19,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => MapaProvider()),
         ChangeNotifierProvider(create: (_) => ProdutoProvider()),
       ],
+
       child: const MyApp(),
     ),
   );
@@ -29,8 +30,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-    debugShowCheckedModeBanner: false, 
-    home: PaginaLogin());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: PaginaLogin());
   }
 }

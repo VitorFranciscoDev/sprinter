@@ -1,5 +1,3 @@
-
-
 class Usuario {
   final String uid;
   final String nome;

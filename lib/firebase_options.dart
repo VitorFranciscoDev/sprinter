@@ -59,7 +59,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCBSls4TRhJHPwlMkwV5qIjxSA805py3nc',
-    appId: '1:104143026082:android:5d2a5fb605644c76eaa4fb',
+    appId: '1:104143026082:android:770c258a7d8f2b67eaa4fb',
     messagingSenderId: '104143026082',
     projectId: 'sprinter-27ea3',
     databaseURL: 'https://sprinter-27ea3-default-rtdb.firebaseio.com',
@@ -73,8 +73,8 @@ class DefaultFirebaseOptions {
     projectId: 'sprinter-27ea3',
     databaseURL: 'https://sprinter-27ea3-default-rtdb.firebaseio.com',
     storageBucket: 'sprinter-27ea3.firebasestorage.app',
+    androidClientId: '104143026082-v1r3pusk57legr49uoj9ms6g51idbk45.apps.googleusercontent.com',
     iosClientId: '104143026082-euks8mbvs7ab4jsulvq9re9d9njvfocl.apps.googleusercontent.com',
     iosBundleId: '123',
   );
-
 }

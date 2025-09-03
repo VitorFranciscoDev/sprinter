@@ -8,13 +8,13 @@ class WidgetCarrinho extends StatefulWidget {
   final String nome;
 
   const WidgetCarrinho(
-      Key? key,
-      this.produtoId,
-      this.quantidade,
-      this.userId,
-      this.preco,
-      this.nome,
-      ) : super(key: key);
+    Key? key,
+    this.produtoId,
+    this.quantidade,
+    this.userId,
+    this.preco,
+    this.nome,
+  ) : super(key: key);
 
   @override
   _WidgetCarrinhoState createState() => _WidgetCarrinhoState();
@@ -24,8 +24,8 @@ class _WidgetCarrinhoState extends State<WidgetCarrinho> {
   int quantidade = 1;
   String nome = "";
   double preco = 0.0;
-  String userid="";
-  String produtoid="";
+  String userid = "";
+  String produtoid = "";
   @override
   void initState() {
     super.initState();
@@ -35,14 +35,8 @@ class _WidgetCarrinhoState extends State<WidgetCarrinho> {
     userid = widget.userId;
     produtoid = widget.produtoId;
   }
-  Comprar(
-      int quantidade,
-      double preco,
-      String produtoid,
-      String userid,
-      ){
 
-  }
+  Comprar(int quantidade, double preco, String produtoid, String userid) {}
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -86,15 +80,23 @@ class _WidgetCarrinhoState extends State<WidgetCarrinho> {
               ),
             ),
             Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Color.fromARGB(255, 5, 106, 12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Color.fromARGB(255, 5, 106, 12),
+              ),
+              child: TextButton(
+                child: Text(
+                  "Comprar",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Lao Muang Don",
+                    fontSize: 15,
+                  ),
                 ),
-                child: TextButton(
-                  child:Text("Comprar",style: TextStyle(color: Colors.white,fontFamily: "Lao Muang Don",fontSize: 15),),
-                  onPressed: () {
-                    Comprar(quantidade,preco,produtoid,userid);
-                  },)
+                onPressed: () {
+                  Comprar(quantidade, preco, produtoid, userid);
+                },
+              ),
             ),
           ],
         ),

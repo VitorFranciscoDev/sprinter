@@ -43,11 +43,11 @@ class _PaginaState extends State<Pagina> {
   carregarFotoPerfil() {
     try {
       final userProvider = context.watch<UserProvider>();
-      final fotoBase64 = userProvider.user!.fotoPerfil;
+      final fotoBase64 = userProvider.getFotoPerfil();
 
       if (fotoBase64 != null && fotoBase64.isNotEmpty) {
         setState(() {
-          bytes = base64Decode(fotoBase64);
+          bytes = base64Decode(fotoBase64['fotoPerfil']);
         });
       }
     } catch (e) {
@@ -167,8 +167,4 @@ class _PaginaState extends State<Pagina> {
       ),
     );
   }
-}
-
-extension on Future<DocumentSnapshot<Map<String, dynamic>>> {
-  operator [](String other) {}
 }
